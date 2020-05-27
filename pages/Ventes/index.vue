@@ -1,10 +1,11 @@
 <template>
-  <div></div>
+  <div>Ventes</div>
 </template>
 
 <script>
 export default {
-  name: 'Index'
+  name: 'Ventes'
 }
 </script>
+
 <style scoped></style>
