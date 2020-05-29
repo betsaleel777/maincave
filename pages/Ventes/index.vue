@@ -1,11 +1,17 @@
 <template>
-  <div>Ventes</div>
+  <div>
+    <ListeVente></ListeVente>
+  </div>
 </template>
 
 <script>
+import ListeVente from '@/components/Ventes/liste'
 export default {
-  name: 'Ventes'
+  name: 'Ventes',
+  components: {
+    ListeVente
+  }
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>

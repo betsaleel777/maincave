@@ -1,7 +1,11 @@
-/* eslint-disable no-console */
 <template>
   <div>
-    <b-modal id="add" @ok="save" title="AJOUTER UN ACHAT">
+    <b-modal
+      :id="`edit-${modalId}`"
+      @ok="edit"
+      @cancel="refresh"
+      :title="`MODIFIER LA VENTE : ${code}`"
+    >
       <div class="form-group">
         <b-alert
           :show="alerter"
@@ -11,10 +15,18 @@
           fade
           >{{ messages.join(' , ') }}</b-alert
         >
-        <label for="">Produit</label>
-        <v-select v-model="selected" :options="produits"></v-select>
         <label for="">Quantite</label>
         <input v-model="quantite" type="text" class="form-control" />
+        <label for="datepicker">Date</label>
+        <b-form-datepicker
+          id="datepicker"
+          v-model="date"
+          today-button
+          reset-button
+          close-button
+          locale="fr"
+          selected-variant="success"
+        ></b-form-datepicker>
       </div>
     </b-modal>
   </div>
@@ -22,16 +34,21 @@
 
 <script>
 export default {
-  name: 'AddAchat',
-  props: ['produits'],
+  name: 'EditVente',
+  props: ['modalId', 'vente'],
   data() {
     return {
       alerter: false,
       messages: [],
-      selected: null,
-      produit: null,
-      quantite: null
+      code: null,
+      quantite: null,
+      date: null
     }
+  },
+  mounted() {
+    this.code = this.vente.value.code
+    this.quantite = this.vente.value.quantite
+    this.date = this.vente.value.date
   },
   methods: {
     wait(milliseconds) {
@@ -41,23 +58,21 @@ export default {
       this.alerter = false
       this.messages = []
     },
-    save(event) {
+    edit(event) {
       if (this.messages.length > 0) {
         this.messages = []
       }
       event.preventDefault()
-      if (this.selected !== null) {
-        this.produit = this.selected.code
-      }
       this.$axios
-        .$post('/api/approvisionnement/add', {
-          produit: this.produit,
-          quantite: this.quantite
+        .$post('/api/vente/update', {
+          id: this.modalId,
+          quantite: this.quantite,
+          date: this.date
         })
         .then((response) => {
           if (response.message) {
             this.$bvToast.toast(response.message, {
-              title: `ENREGISTREMENT D'ACHAT`,
+              title: `MODIFICATION DE LA VENTE ${this.code}`,
               variant: 'success',
               solid: true
             })
@@ -69,22 +84,31 @@ export default {
           this.$bvToast.toast(
             'les champs ont été mal remplis veuillez ressayez en tenant compe des indications',
             {
-              title: `ENREGISTREMENT D'ACHAT`,
+              title: `MODIFICATION DE LA VENTE ${this.code}`,
               variant: 'danger',
               solid: true
             }
           )
           const { errors } = err.response.data
-          if (errors.produit) {
-            this.messages.push(errors.produit[0])
-          }
           if (errors.quantite) {
             this.messages.push(errors.quantite[0])
           }
         })
       this.$nextTick(() => {
-        this.$bvModal.hide('add')
+        this.$bvModal.hide('edit')
       })
+    },
+    refresh() {
+      this.$axios
+        .$get('/api/vente/' + this.modalId)
+        .then((response) => {
+          this.code = response.vente.code
+          this.quantite = response.vente.quantite
+          this.date = response.vente.created_at
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 }

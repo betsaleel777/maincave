@@ -7,7 +7,7 @@
 <script>
 import ListeAchat from '@/components/Approvisionnements/liste'
 export default {
-  name: 'Approvisionnement',
+  name: 'Approvisionnements',
   components: {
     ListeAchat
   }

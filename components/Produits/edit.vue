@@ -76,6 +76,14 @@ export default {
         })
         .catch((err) => {
           this.alerter = true
+          this.$bvToast.toast(
+            'les champs ont été mal remplis veuillez ressayez en tenant compe des indication',
+            {
+              title: `ENREGISTREMENT DE PRODUIT`,
+              variant: 'danger',
+              solid: true
+            }
+          )
           const { errors } = err.response.data
           if (errors.libelle) {
             this.messages.push(errors.libelle[0])

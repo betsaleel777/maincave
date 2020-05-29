@@ -29,15 +29,15 @@
         <b-button @click="edit(data.value.id)" variant="outline-primary"
           >editer</b-button
         >
-        <b-button @click="show(data.value.id)" variant="outline-warning"
+        <!-- <b-button @click="show(data.value.id)" variant="outline-warning"
           >voir</b-button
-        >
+        > -->
         <b-button
-          @click="trash(data.value.id, data.value.libelle)"
+          @click="trash(data.value.id, data.value.code)"
           variant="outline-danger"
           >supprimer</b-button
         >
-        <EditProduct :modalId="data.value.id" :produit="data"></EditProduct>
+        <EditVente :modalId="data.value.id" :vente="data"></EditVente>
       </template>
     </b-table>
     <div>
@@ -51,30 +51,32 @@
         pills
       ></b-pagination>
     </div>
-    <AddProduct></AddProduct>
+    <AddVente :produits="produits"></AddVente>
   </div>
 </template>
 
 <script>
-import AddProduct from '@/components/Produits/add'
-import EditProduct from '@/components/Produits/edit'
+import AddVente from '@/components/Ventes/add'
+import EditVente from '@/components/Ventes/edit'
 export default {
-  name: 'ListeProduit',
+  name: 'ListeVente',
   components: {
-    AddProduct,
-    EditProduct
+    AddVente,
+    EditVente
   },
   data() {
     return {
       items: [],
+      produits: [],
       page: 1,
       parPage: 7,
       critere: null,
-      produit: null,
       fields: [
-        { key: 'libelle', label: 'Libellé', sortable: true },
-        { key: 'prix_achat', label: 'Prix achat', sortable: true },
+        { key: 'code', label: 'Code', sortable: false },
+        { key: 'libelle', label: 'Produit', sortable: true },
         { key: 'prix_vente', label: 'Prix vente', sortable: true },
+        { key: 'quantite', label: 'Quantite', sortable: true },
+        { key: 'date', label: 'Date', sortable: true },
         { key: 'option', label: 'Option' }
       ]
     }
@@ -85,19 +87,29 @@ export default {
     }
   },
   async fetch() {
-    const { produits } = await this.$axios.$get('/api/produits')
-    this.items = produits.map((produit) => {
+    const { ventes } = await this.$axios.$get('/api/ventes')
+    this.items = ventes.map((vente) => {
       return {
-        id: produit.id,
-        libelle: produit.libelle,
-        prix_achat: produit.prix_achat,
-        prix_vente: produit.prix_vente,
+        id: vente.id,
+        code: vente.code,
+        quantite: vente.quantite,
+        date: vente.created_at,
+        produit: vente.produit_linked.id,
+        libelle: vente.produit_linked.libelle,
+        prix_vente: vente.produit_linked.prix_vente,
         option: {
-          libelle: produit.libelle,
-          id: produit.id,
-          prix_achat: produit.prix_achat,
-          prix_vente: produit.prix_vente
+          id: vente.id,
+          code: vente.code,
+          date: vente.created_at,
+          quantite: vente.quantite
         }
+      }
+    })
+    const { produits } = await this.$axios.$get('/api/produits')
+    this.produits = produits.map((produit) => {
+      return {
+        code: produit.id,
+        label: produit.libelle
       }
     })
   },
@@ -111,12 +123,9 @@ export default {
     edit(id) {
       this.$bvModal.show('edit-' + id)
     },
-    show(id) {
-      console.log(id)
-    },
-    trash(id, libelle) {
+    trash(id, code) {
       this.$bvModal
-        .msgBoxConfirm(`Voulez vous vraiment supprimer le produit ${libelle}`, {
+        .msgBoxConfirm(`Voulez vous vraiment supprimer l'achat ${code}`, {
           title: 'SUPPRESSION',
           size: 'sm',
           buttonSize: 'sm',
@@ -130,10 +139,10 @@ export default {
         .then((value) => {
           if (value) {
             this.$axios
-              .$post('/api/produit/trash', { id })
+              .$post('/api/vente/trash', { id })
               .then((response) => {
                 this.$bvToast.toast(response.message, {
-                  title: `SUPPRESSION DE PRODUIT`,
+                  title: `SUPPRESSION DE LA VENTE ${code}`,
                   variant: 'success',
                   solid: true
                 })

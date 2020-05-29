@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 <template>
   <div>
-    <b-modal id="add" @ok="save" title="AJOUTER UN PRODUIT">
+    <b-modal id="add" @ok="save" title="CREER UNE VENTE">
       <div class="form-group">
         <b-alert
           :show="alerter"
@@ -11,12 +11,10 @@
           fade
           >{{ messages.join(' , ') }}</b-alert
         >
-        <label for="">Libellé</label>
-        <input v-model="libelle" type="text" class="form-control" />
-        <label for="">Prix d'achat</label>
-        <input v-model="prix_achat" type="text" class="form-control" />
-        <label for="">Prix de vente</label>
-        <input v-model="prix_vente" type="text" class="form-control" />
+        <label for="">Produit</label>
+        <v-select v-model="selected" :options="produits"></v-select>
+        <label for="">Quantite</label>
+        <input v-model="quantite" type="text" class="form-control" />
       </div>
     </b-modal>
   </div>
@@ -24,14 +22,15 @@
 
 <script>
 export default {
-  name: 'AddProduct',
+  name: 'AddVente',
+  props: ['produits'],
   data() {
     return {
       alerter: false,
       messages: [],
-      libelle: null,
-      prix_achat: null,
-      prix_vente: null
+      selected: null,
+      produit: null,
+      quantite: null
     }
   },
   methods: {
@@ -47,16 +46,18 @@ export default {
         this.messages = []
       }
       event.preventDefault()
+      if (this.selected !== null) {
+        this.produit = this.selected.code
+      }
       this.$axios
-        .$post('/api/produit/add', {
-          libelle: this.libelle,
-          prix_achat: this.prix_achat,
-          prix_vente: this.prix_vente
+        .$post('/api/vente/add', {
+          produit: this.produit,
+          quantite: this.quantite
         })
         .then((response) => {
           if (response.message) {
             this.$bvToast.toast(response.message, {
-              title: `ENREGISTREMENT DE PRODUIT`,
+              title: `CREATION DE VENTE`,
               variant: 'success',
               solid: true
             })
@@ -66,22 +67,19 @@ export default {
         .catch((err) => {
           this.alerter = true
           this.$bvToast.toast(
-            'les champs ont été mal remplis veuillez ressayez en tenant compe des indication',
+            'les champs ont été mal remplis veuillez ressayez en tenant compe des indications',
             {
-              title: `ENREGISTREMENT DE PRODUIT`,
+              title: `CREATION DE VENTE`,
               variant: 'danger',
               solid: true
             }
           )
           const { errors } = err.response.data
-          if (errors.libelle) {
-            this.messages.push(errors.libelle[0])
+          if (errors.produit) {
+            this.messages.push(errors.produit[0])
           }
-          if (errors.prix_achat) {
-            this.messages.push(errors.prix_achat[0])
-          }
-          if (errors.prix_vente) {
-            this.messages.push(errors.prix_vente[0])
+          if (errors.quantite) {
+            this.messages.push(errors.quantite[0])
           }
         })
       this.$nextTick(() => {

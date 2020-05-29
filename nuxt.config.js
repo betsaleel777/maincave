@@ -45,7 +45,8 @@ export default {
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    'nuxt-vue-select'
   ],
   /*
    ** Axios module configuration
