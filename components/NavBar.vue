@@ -1,6 +1,8 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="primary">
-    <b-navbar-brand href="#">MainCave</b-navbar-brand>
+  <b-navbar toggleable="lg" type="dark" variant="warning">
+    <b-navbar-brand href=""
+      ><nuxt-link id="dash" to="/">MainCave</nuxt-link></b-navbar-brand
+    >
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -16,9 +18,6 @@
         </li>
         <li class="nav-item">
           <nuxt-link to="/Ventes" class="nav-link">Ventes</nuxt-link>
-        </li>
-        <li class="nav-item">
-          <nuxt-link to="/Bilans" class="nav-link">Bilans</nuxt-link>
         </li>
       </b-navbar-nav>
 
@@ -53,4 +52,4 @@
 export default {}
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

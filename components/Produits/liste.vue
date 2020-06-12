@@ -29,8 +29,10 @@
         <b-button @click="edit(data.value.id)" variant="outline-primary"
           >editer</b-button
         >
-        <b-button @click="show(data.value.id)" variant="outline-warning"
-          >voir</b-button
+        <nuxt-link
+          :to="{ name: 'Produits-id', params: { id: data.value.id } }"
+          class="btn btn-outline-warning"
+          >ventes</nuxt-link
         >
         <b-button
           @click="trash(data.value.id, data.value.libelle)"

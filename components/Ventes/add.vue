@@ -40,6 +40,9 @@ export default {
     dismiss() {
       this.alerter = false
       this.messages = []
+      this.invalidCheck = false
+      this.quantite = null
+      this.checkMessage = null
     },
     save(event) {
       if (this.messages.length > 0) {
@@ -58,7 +61,7 @@ export default {
           if (response.message) {
             this.$bvToast.toast(response.message, {
               title: `CREATION DE VENTE`,
-              variant: 'success',
+              variant: response.variant,
               solid: true
             })
           }
@@ -90,4 +93,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

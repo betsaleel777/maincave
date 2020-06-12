@@ -27,7 +27,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [
+    { src: '~/plugins/vue-animation-number', mode: 'client' },
+    { src: '~/plugins/vue-html-to-paper', mode: 'client' },
+    { src: '~plugins/vue-charts', mode: 'client' }
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -46,7 +50,12 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     '@nuxtjs/proxy',
+    '@nuxtjs/redirect-module',
     'nuxt-vue-select'
+  ],
+  redirect: [
+    { from: '^/inventaire', to: '/Inventaire' },
+    { from: '^/listing', to: '/Listing' }
   ],
   /*
    ** Axios module configuration

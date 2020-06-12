@@ -67,13 +67,14 @@ export default {
         .$post('/api/vente/update', {
           id: this.modalId,
           quantite: this.quantite,
+          produit: this.vente.value.produit,
           date: this.date
         })
         .then((response) => {
           if (response.message) {
             this.$bvToast.toast(response.message, {
               title: `MODIFICATION DE LA VENTE ${this.code}`,
-              variant: 'success',
+              variant: response.variant,
               solid: true
             })
           }
@@ -104,6 +105,7 @@ export default {
         .then((response) => {
           this.code = response.vente.code
           this.quantite = response.vente.quantite
+          this.produit = response.vente.produit_linked.id
           this.date = response.vente.created_at
         })
         .catch((err) => {

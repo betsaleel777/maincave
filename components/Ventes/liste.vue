@@ -3,7 +3,12 @@
     <div class="row commandes">
       <div class="col-md-10"></div>
       <div class="col-md-2">
-        <button @click="add" style="width:100%" class="btn btn-primary">
+        <button
+          :disabled="traitement"
+          @click="add"
+          style="width:100%"
+          class="btn btn-primary"
+        >
           ajouter
         </button>
       </div>
@@ -26,13 +31,17 @@
       primary-key="id"
     >
       <template v-slot:cell(option)="data">
-        <b-button @click="edit(data.value.id)" variant="outline-primary"
+        <b-button
+          :disabled="data.value.fermer == true"
+          @click="edit(data.value.id)"
+          variant="outline-primary"
           >editer</b-button
         >
         <!-- <b-button @click="show(data.value.id)" variant="outline-warning"
           >voir</b-button
         > -->
         <b-button
+          :disabled="data.value.fermer == true"
           @click="trash(data.value.id, data.value.code)"
           variant="outline-danger"
           >supprimer</b-button
@@ -68,6 +77,7 @@ export default {
     return {
       items: [],
       produits: [],
+      traitement: false,
       page: 1,
       parPage: 7,
       critere: null,
@@ -87,7 +97,7 @@ export default {
     }
   },
   async fetch() {
-    const { ventes } = await this.$axios.$get('/api/ventes')
+    const { ventes, traitement } = await this.$axios.$get('/api/ventes')
     this.items = ventes.map((vente) => {
       return {
         id: vente.id,
@@ -99,12 +109,17 @@ export default {
         prix_vente: vente.produit_linked.prix_vente,
         option: {
           id: vente.id,
+          produit: vente.produit_linked.id,
           code: vente.code,
           date: vente.created_at,
+          fermer: vente.fermer,
           quantite: vente.quantite
         }
       }
     })
+    if (traitement) {
+      this.traitement = traitement
+    }
     const { produits } = await this.$axios.$get('/api/produits')
     this.produits = produits.map((produit) => {
       return {
