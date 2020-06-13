@@ -16,6 +16,12 @@
     <div class="recherche">
       <label for="search">Recherche:</label>
       <input id="search" v-model="critere" type="text" placeholder="" />
+      <!-- <button @click="modeList" v-if="!tout" class="btn btn-success">
+        Ouverts
+      </button>
+      <button @click="modeList" v-if="tout" class="btn btn-warning">
+        Tout
+      </button> -->
     </div>
     <b-table
       id="tableau"
@@ -78,6 +84,7 @@ export default {
       items: [],
       produits: [],
       traitement: false,
+      tout: false,
       page: 1,
       parPage: 7,
       critere: null,
@@ -137,6 +144,9 @@ export default {
     },
     edit(id) {
       this.$bvModal.show('edit-' + id)
+    },
+    modeList() {
+      this.tout = !this.tout
     },
     trash(id, code) {
       this.$bvModal

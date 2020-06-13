@@ -15,8 +15,7 @@ export default {
   },
   methods: {
     oldInventoryGet() {
-      // afficher une page imprimable contenant les informations de l'inventaire à cette date
-      console.log('inventaire passé demandé')
+      location.href = `/inventaire/${this.date.label}`
     }
   }
 }
