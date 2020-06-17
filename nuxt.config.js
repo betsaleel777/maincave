@@ -9,8 +9,9 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
-        hid: 'description',
-        name: 'description',
+        hid: 'Gestionnaire de Cave',
+        name:
+          'Application légère qui permet de gerer un magasin de moyenne envergure',
         content: process.env.npm_package_description || ''
       }
     ],
@@ -66,7 +67,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
+    proxy: true,
+    https: true
   },
   proxy: {
     '/api': {
