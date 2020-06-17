@@ -67,8 +67,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true,
-    https: true
+    proxy: true
   },
   proxy: {
     '/api': {
@@ -76,7 +75,8 @@ export default {
       pathRewrite: {
         '^/api': '/'
       },
-      changeOrigin: true
+      changeOrigin: true,
+      https: true
     }
   },
   /*
