@@ -75,8 +75,7 @@ export default {
       pathRewrite: {
         '^/api': '/'
       },
-      changeOrigin: true,
-      https: true
+      changeOrigin: true
     }
   },
   /*
