@@ -63,7 +63,7 @@ export default {
       mostWantedQuantity,
       mostWantedName
     } = await $axios.$get('/api/dashboard/utils')
-    const { dates } = await $axios.$get('/api/dashboard/dates/')
+    const { dates } = await $axios.$get('/api/dashboard/dates')
     const { traitement } = await $axios.$get('/api/dashboard/status/examen')
     return {
       traitement,
