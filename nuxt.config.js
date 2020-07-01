@@ -74,7 +74,7 @@ export default {
   },
   proxy: {
     '/api': {
-      target: 'http://maincave-server.herokuapp.com/api/',
+      target: 'https://maincave-server.herokuapp.com/api/',
       pathRewrite: {
         '^/api': '/'
       },
